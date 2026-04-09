@@ -1,6 +1,6 @@
 from data_structures import Queue
 
-class Request:
+class RequestQueue:
     def __init__(self):
         self.body = Queue()
     def enqueue(self,item):
