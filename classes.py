@@ -212,6 +212,15 @@ class Room:
             if booking.start_time > current_time:
                 return booking
         return None
+    
+    def remove_booking(self, event_name: str):
+        # 1. Remove from list
+        self.bookings = [b for b in self.bookings if b.event_name != event_name]
+        
+        # 2. Rebuild the AVL tree since we don't have a delete function
+        self.calendar = Event_Index()
+        for b in self.bookings:
+            self.calendar.add_event(b.start_time, b)
             
 class priorityQ:
     def __init__(self):
