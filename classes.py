@@ -204,7 +204,8 @@ class Room:
     def events_in_range(self, start_time: datetime, end_time: datetime):
         output = []
         # We use the AVL tree search instead of the old for-loop
-        self.calendar.get_range(self.calendar.root, start_time, end_time, output)
+        if self.calendar.root:
+            self.calendar.get_range(self.calendar.root, start_time, end_time, output)
         return output
     
     def next_event(self, current_time : datetime):
@@ -216,7 +217,7 @@ class Room:
     def get_events_for_day(self, year, month, day):
         day_start = datetime.datetime(year, month, day, 0, 0, 0)
         day_end = datetime.datetime(year, month, day, 23, 59, 59)
-        return self.get_bookings_in_range(day_start, day_end)
+        return self.events_in_range(day_start, day_end)
     
     def remove_booking(self, event_name: str):
         # 1. Remove from list
