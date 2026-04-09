@@ -201,12 +201,11 @@ class Room:
         self.bookings.append(new_booking)
         self.bookings.sort()        
     
-    def events_in_range(self, start_time : datetime, end_time : datetime):
+    def events_in_range(self, start_time: datetime, end_time: datetime):
         output = []
-        # for events in a given day have the start_time be the 12am of that day and end_time be 11:59 pm of that day
-        for booking in self.bookings:
-            if end_time >= booking.date_time >= start_time:
-                output.append(booking)
+        # Call the recursive range search on the AVL tree
+        self.calendar.get_range(self.calendar.root, start_time, end_time, output)
+        return output
     
     def next_event(self, curr_event : Booking):
         for booking in range(len(self.bookings)):
