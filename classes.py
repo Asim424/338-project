@@ -1,8 +1,14 @@
 import datetime
 
-class Booking():
-    def __init__(self, date_time : datetime):
-        self.date_time = date_time
+class Booking:
+    def __init__(self, event_name: str, start_time: datetime, end_time: datetime):
+        self.event_name = event_name
+        self.start_time = start_time  # This replaces date_time
+        self.end_time = end_time
+
+    # This helper allows to compare bookings directly by time
+    def __lt__(self, other):
+        return self.start_time < other.start_time
 
 class Path: #straight line between 2 points, start and end order does not matter
     def __init__(self,start : tuple, end : tuple, weight : float):
