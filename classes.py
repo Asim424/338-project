@@ -155,7 +155,19 @@ class Event_Index:
         else:
             return self.search(node.body[3], key)
         
+    def get_range(self, node, start_key, end_key, result):
+        if not node:
+            return
+        # If the current node's key is within the range, add it to the result
+        if start_key < node.body[0]:
+            self.get_range(node.body[2], start_key, end_key, result)
+        # If the current node's key is within the range, add it to the result
+        if start_key <= node.body[0] <= end_key:
+            result.append(node.body[1])
 
+        if end_key > node.body[0]:
+            self.get_range(node.body[3], start_key, end_key, result)
+        
 class Requests:
     def __init__(self):
         self.body = Queue()
