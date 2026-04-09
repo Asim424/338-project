@@ -203,7 +203,7 @@ class Room:
     
     def events_in_range(self, start_time: datetime, end_time: datetime):
         output = []
-        # Call the recursive range search on the AVL tree
+        # We use the AVL tree search instead of the old for-loop
         self.calendar.get_range(self.calendar.root, start_time, end_time, output)
         return output
     
