@@ -213,6 +213,11 @@ class Room:
                 return booking
         return None
     
+    def get_events_for_day(self, year, month, day):
+        day_start = datetime.datetime(year, month, day, 0, 0, 0)
+        day_end = datetime.datetime(year, month, day, 23, 59, 59)
+        return self.get_bookings_in_range(day_start, day_end)
+    
     def remove_booking(self, event_name: str):
         # 1. Remove from list
         self.bookings = [b for b in self.bookings if b.event_name != event_name]
