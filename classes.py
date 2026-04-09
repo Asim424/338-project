@@ -172,14 +172,14 @@ class Requests:
 
 class Room:
     def __init__(self, room_id: str, capacity: int, room_type: str):
-
-        self.room_id = room_id   # e.g. "ICT-121"
-
-        self.capacity = capacity    # max occupancy
-
-        self.room_type = room_type  # "lecture", "lab", "office"
-
-        self.bookings = []  # list of Booking objects
+        self.room_id = room_id
+        self.capacity = capacity
+        self.room_type = room_type
+        
+        # We will use the AVL Tree (Event_Index) for high-performance lookups
+        self.calendar = Event_Index() 
+        # Keep the list for simple sequential access if needed
+        self.bookings = []
     
     def events_in_range(self, start_time : datetime, end_time : datetime):
         output = []
