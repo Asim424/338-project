@@ -58,9 +58,7 @@ class Queue:
 
 class Node:
     def __init__(self, key, event):
-        self.body = []
-       
-
+        self.body = [key, event, None, None, 1]  # [key, event, left, right, height]
 
 class Event_Index:
     # node is an array such that [key, event, left, right, height]
