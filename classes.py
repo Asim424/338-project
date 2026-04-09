@@ -370,7 +370,7 @@ if __name__ == "__main__":
                 temp = vertix()
                 temp.make_connection(buildings[i],buildings[j],floor(random.random()*10))
                 buildings[i].add_vertix(temp)
-                buildings[j].add_vertix(temp)
+                buildings[j].add_vertix(temp)   
     build1 = floor(random.random()*10)  
     build2 = floor(random.random()*10)
     path = campus.find_path(buildings[build1],buildings[build2])
