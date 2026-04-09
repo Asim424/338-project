@@ -207,10 +207,11 @@ class Room:
         self.calendar.get_range(self.calendar.root, start_time, end_time, output)
         return output
     
-    def next_event(self, curr_event : Booking):
-        for booking in range(len(self.bookings)):
-            if self.bookings[booking] == curr_event:
-                return self.bookings[booking+1]
+    def next_event(self, current_time : datetime):
+        for booking in self.bookings:
+            if booking.start_time > current_time:
+                return booking
+        return None
             
 class priorityQ:
     def __init__(self):
