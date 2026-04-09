@@ -176,10 +176,20 @@ class Room:
         self.capacity = capacity
         self.room_type = room_type
         
-        # We will use the AVL Tree (Event_Index) for high-performance lookups
+        # AVL tree to store events by time for efficient search and insertion
         self.calendar = Event_Index() 
-        # Keep the list for simple sequential access if needed
+        # List to store bookings in order of insertion for easy retrieval of events in a range and next event
         self.bookings = []
+
+    def add_booking(self, event_name, start, end):
+        new_booking = Booking(event_name, start, end)
+        
+        # 1. Add to AVL tree for efficient search by time
+        self.calendar.add_event(start, new_booking)
+        
+        # 2. Add to list and keep it sorted for easy retrieval of events in a range and next event
+        self.bookings.append(new_booking)
+        self.bookings.sort()        
     
     def events_in_range(self, start_time : datetime, end_time : datetime):
         output = []
