@@ -1,6 +1,7 @@
 from math import inf
 from building import *
 from data_structures import PriorityQueue, Stack
+from ui_functions import format_row
 
 
 class PathwayEdge:
@@ -132,7 +133,7 @@ class CampusGraph:
         route = Stack()
         cur = self.building_nodes[to_id]
         while cur is not None:
-            route.push(cur.data.building_id)
+            route.push(cur.data)
             cur = pred[cur]
 
         return route, cur_dist[self.building_nodes[to_id]]
@@ -185,6 +186,23 @@ class CampusGraph:
                 raise ValueError(f"Weight parameter must be an integer: {line}")
 
             self.add_pathway(id1, id2, weight)
+
+    def print_table(self):
+        headers = ["ID", "Name", "Latitude", "Longitude"]
+        cell_width = 16
+
+        # Header
+        header_row = format_row(headers, cell_width)
+        print(header_row)
+        print("-" * len(header_row))
+
+        # Building rows
+        for node in self.building_nodes.values():
+            building = node.data
+            print(format_row([building.building_id, building.name, building.location[0], building.location[1]], cell_width))
+            
+
+
 
 
 
