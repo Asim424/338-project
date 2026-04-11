@@ -31,6 +31,10 @@ class Stack:
         if self.body is not None:
             return self.body.pop()
         return IndexError("stack is empty")
+    def is_empty(self):
+        if len(self.body) == 0:
+            return True
+        return False
 
 class Queue:
     def __init__(self):
