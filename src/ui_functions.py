@@ -87,6 +87,7 @@ def view_buildings(campus, history):
                 break
 
             route, dist = campus.find_shortest_path(id1, id2)
+            history.push(campus.lookup_building(id1), campus.lookup_building(id2), route, dist)
 
             print(f"\nThe shortest route, with a total walking time of {dist} minutes is: ")
             while not route.is_empty():
