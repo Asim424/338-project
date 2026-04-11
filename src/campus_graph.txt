@@ -1,9 +1,43 @@
-Id1--Name1--0--0
-Id2--Name2--0--0
-Id3--Name3--0--0
-Id4--Name4--0--0
+BI__Biological Sciences__51.079906__-114.124571
+MS__Math Sciences__51.079942__-114.127991
+SA__Science A__51.079161__-114.128192
+EEEL__Energy Environment Experimental Learning__51.081054__-114.129486
+ES__Earth Sciences__51.080154__-114.129149
+ICT__Information & Communcations Technology__51.080148__-114.130320
+EN__Schulich School of Engineering__51.080342__-114.131885
+MH__MacEwan Hall__51.078688__-114.129947
+MSC__MacEwan Student Centre__51.078204__-114.131851
+KNA__Kinesiology Block A__51.077220__-114.132975
+KNB__Kinesiology Block B__51.077878__-114.133863
+TFDL__Taylor Family Digital Library__51.077406__-114.129831
+HNSC__Hunter Student Commons__51.078042__-114.129014
+AD__Administration__51.078216__-114.129788
+DC__Dining Centre__51.075856__-114.133533
 ===
-Id1--Id2--1
-Id1--Id3--4
-Id2--Id4--10
-Id3--Id4--6
+BI__MS__196
+BI__SA__198
+BI__AD__218
+AD__SA__134
+AD__HNSC__152
+HNSC__MH__95
+HNSC__TFDL__85
+TFDL__MH__145
+TFDL__DC__307
+TFDL__KNA__220
+TFDL__MSC__165
+KNA__KNB__103
+KNA__DC__154
+KNA__MSC__136
+KNB__MSC__138
+MS__SA__90
+SA__MH__140
+MS__ES__89
+MS__EEEL__166
+ES__ICT__87
+ES__EEEL__96
+ICT__EEEL__125
+ICT__EN__121
+ICT__MH__166
+EN__MH__242
+EN__MSC__256
+MSC__MH__141

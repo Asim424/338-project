@@ -5,7 +5,7 @@ from ui_functions import format_row
 
 
 class PathwayEdge:
-    def __init__(self, dest: Building, weight: int):
+    def __init__(self, dest: Building, weight: float):
         self.dest = dest
         self.weight = weight
         self.next = None
@@ -58,7 +58,7 @@ class CampusGraph:
                 n.remove_pathway(node)
         del self.building_nodes[node.data.building_id]
 
-    def add_pathway(self, id1: str, id2: str, weight: int):
+    def add_pathway(self, id1: str, id2: str, weight: float):
         if id1 not in self.building_nodes:
             raise KeyError(f"Building {id1} not found")
         if id2 not in self.building_nodes:
@@ -151,7 +151,7 @@ class CampusGraph:
             if line == "===":
                 break
 
-            tokens = line.split("--")
+            tokens = line.split("__")
 
             id = tokens[0]
             if id in self.building_nodes:
@@ -170,7 +170,7 @@ class CampusGraph:
         while lines:
             line = lines.pop(0).strip()
 
-            tokens = line.split("--")
+            tokens = line.split("__")
 
             id1 = tokens[0]
             if id1 not in self.building_nodes:
@@ -181,15 +181,15 @@ class CampusGraph:
                 raise RuntimeError(f"{id2} not found in buildings: {line}")
             
             try:
-                weight = int(tokens[2])
+                weight = round(float(tokens[2]) / 1.35 / 60, 2) # Weight is distance in meters and is converted into minutes using average walking speed
             except:
-                raise ValueError(f"Weight parameter must be an integer: {line}")
+                raise ValueError(f"Weight parameter must be an floating-point number: {line}")
 
             self.add_pathway(id1, id2, weight)
 
     def print_table(self):
         headers = ["ID", "Name", "Latitude", "Longitude"]
-        cell_width = 16
+        cell_width = 24
 
         # Header
         header_row = format_row(headers, cell_width)
