@@ -1,6 +1,6 @@
 from math import inf
 from building import *
-from data_structures import PriorityQueue
+from data_structures import PriorityQueue, Stack
 
 
 class PathwayEdge:
@@ -127,11 +127,74 @@ class CampusGraph:
                     min_heap.enqueue(edge.dest, temp_dist)
 
                 edge = edge.next
-        
-        return cur_dist, pred
+
+        # Create a route stack object from the pred dictionary
+        route = Stack()
+        cur = self.building_nodes[to_id]
+        while cur is not None:
+            route.push(cur.data.building_id)
+            cur = pred[cur]
+
+        return route, cur_dist[self.building_nodes[to_id]]
+
+    def import_from_file(self, file):
+        self.building_nodes = {}
+
+        lines = file.readlines()
+
+        # Nodes
+        while lines: 
+            line = lines.pop(0).strip()
+            if len(line) == 0:
+                break
+            if line == "===":
+                break
+
+            tokens = line.split("--")
+
+            id = tokens[0]
+            if id in self.building_nodes:
+                raise RuntimeError(f"Cannot create two buildings with the same id: {line}")
+
+            name = tokens[1]
+
+            try:
+                location = (float(tokens[2]), float(tokens[3]))
+            except:
+                raise ValueError(f"Building location attributes must be floating-point numbers: {line}")
+            
+            self.insert_building(Building(id, name, location))
+
+        # Edges
+        while lines:
+            line = lines.pop(0).strip()
+
+            tokens = line.split("--")
+
+            id1 = tokens[0]
+            if id1 not in self.building_nodes:
+                raise RuntimeError(f"{id1} not found in buildings: {line}")
+
+            id2 = tokens[1]
+            if id2 not in self.building_nodes:
+                raise RuntimeError(f"{id2} not found in buildings: {line}")
+            
+            try:
+                weight = int(tokens[2])
+            except:
+                raise ValueError(f"Weight parameter must be an integer: {line}")
+
+            self.add_pathway(id1, id2, weight)
 
 
 
+if __name__ == "__main__":
+    campus = CampusGraph()
+    with open("campus_graph.txt") as file:
+        campus.import_from_file(file)
+
+    route, dist = campus.find_shortest_path("Id1", "Id4")
+    print(route)
 
 
 
