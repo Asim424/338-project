@@ -60,48 +60,55 @@ def prompt_menu(options):
     return choice
 
 def view_buildings(campus, history):
-    print_separator()
-    campus.print_table()
-    
-    choice = prompt_menu(["Find shortest route between buildings", "Lookup room by id"])
+    while True:
 
-    print()
-    match choice:
-        case 1:
-            while True:
-                id1 = input("Enter the id of the starting point: ")
+        print_separator()
+        campus.print_table()
+        
+        choice = prompt_menu(["Find shortest route between buildings", "Lookup room by id", "Exit"])
 
-                if campus.lookup_building(id1) is None:
-                    print("Invalid building id. Please try again.")
-                    continue
+        print()
+        match choice:
+            case 1:
+                while True:
+                    id1 = input("Enter the id of the starting point: ")
 
-                break
+                    if campus.lookup_building(id1) is None:
+                        print("Invalid building id. Please try again.")
+                        continue
 
-            while True:
-                id2 = input("Enter the id of the end point: ")
+                    break
 
-                if campus.lookup_building(id2) is None:
-                    print("Invalid building id. Please try again.")
-                    continue
+                while True:
+                    id2 = input("Enter the id of the end point: ")
 
-                break
+                    if campus.lookup_building(id2) is None:
+                        print("Invalid building id. Please try again.")
+                        continue
 
-            route, dist = campus.find_shortest_path(id1, id2)
-            history.push(campus.lookup_building(id1), campus.lookup_building(id2), route, dist)
+                    break
 
-            print(f"\nThe shortest route, with a total walking time of {dist} minutes is: ")
-            while not route.is_empty():
-                building = route.pop()
-                
-                if route.is_empty():
-                    end = "\n"
-                else:
-                    end = " -> "
+                route, dist = campus.find_shortest_path(id1, id2)
+                history.add(campus.lookup_building(id1), campus.lookup_building(id2), route, dist)
 
-                print(f"{building.building_id} ({building.name})", end=end)
-                
-        case 2:
-            pass
+                print(f"\nThe shortest route, with a total walking time of {dist} minutes is: ")
+                while not route.is_empty():
+                    building = route.pop()
+                    
+                    if route.is_empty():
+                        end = "\n"
+                    else:
+                        end = " -> "
+
+                    print(f"{building.building_id} ({building.name})", end=end)
+
+                input("\nPress enter to continue.")
+                    
+            case 2:
+                pass
+
+            case 3:
+                return
 
 def view_route_history():
     pass
