@@ -12,6 +12,9 @@ if __name__ == "__main__":
     # Initialize history
     history = History()
 
+    #Initialize RequestQueue
+    requests = RequestQueue()
+
     while True:
         # Main menu
         choice = prompt_menu(["View buildings", "View route history", "View bookings", "Make service request", "Exit"])
@@ -23,7 +26,7 @@ if __name__ == "__main__":
             case 3: 
                 view_bookings()
             case 4:
-                make_service_request()
+                make_service_request(requests)
             case 5:
                 sys.exit()
 
