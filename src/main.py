@@ -6,7 +6,7 @@ import sys
 if __name__ == "__main__":
     # Initialize campus with buildings (no rooms)
     campus = CampusGraph()
-    with open("src/campus_graph.txt") as campus_file:
+    with open("campus_graph.txt") as campus_file:
         campus.import_from_file(campus_file)
 
     # Initialize history

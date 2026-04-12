@@ -138,7 +138,7 @@ def make_service_request(requests:RequestQueue):
                     input("\nPress enter to continue.")
             case 2:
                 request = requests.dequeue()
-                if isinstance(request, ValueError):
+                if isinstance(request, IndexError):
                     print("There are no requests in the queue")
                 else:
                     print("The request is:")
