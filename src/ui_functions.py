@@ -1,3 +1,5 @@
+from request_processor import RequestQueue
+
 def print_separator():
     print(f"\n{"-" * 79}\n")
 
@@ -116,5 +118,31 @@ def view_route_history():
 def view_bookings():
     pass
 
-def make_service_request():
-    pass
+def make_service_request(requests:RequestQueue):
+    while True:
+        print_separator()
+        choice = prompt_menu(["Create new request", "Get next Request", "exit"])
+
+        print()
+
+        match choice:
+            case 1:
+                request = input("Enter request: ")
+                if not request.strip():
+                    print("No request was given. Exiting create request.")
+                    break
+                requests.enqueue(request)
+                print("Request has ben queued")
+
+                input("\nPress enter to continue.")
+                break
+            case 2:
+                pass
+
+            case 3:
+                pass
+                
+
+
+            
+
