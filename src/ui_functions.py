@@ -1,4 +1,5 @@
 from request_processor import RequestQueue
+from building import  Building
 
 def print_separator():
     print(f"\n{"-" * 79}\n")
@@ -18,33 +19,50 @@ def format_row(items, width):
     return row
 
 def get_int(string = "", minimum = None, maximum = None):
-    # Sets the input range to between minimum and maximum values, inclusive of both. Only runs if applicable.
     if (minimum != None) and (maximum != None):
-        input_range = list(range(minimum, maximum + 1))
+        check_range = True
     else:
-        input_range = None
-    
+        check_range = False
+
     # Loops until a valid integer within the input range is selected.
     while True:
         try:
-            # Case for if the user wants a range of numbers.
-            if input_range is not None:
-                # The user is asked to enter a choice from a menu.
-                user_input = int(input(f"{string}: "))
+            user_input = int(input(f"{string}: "))
 
-                # Prevents invalid inputs from being entered.
-                if user_input not in input_range:
-                    raise RuntimeError
+            # Prevents invalid inputs from being entered.
+            if check_range and (user_input < minimum or user_input > maximum):
+                raise RuntimeError
             
-            else:
-                user_input = int(input(f"{string}"))
-
             # Breaks to the return statement if the input is valid.
             break
         except RuntimeError:
             print(f"You must enter a number from {minimum} to {maximum}. Please try again.")
         except ValueError:
             print(f"You must enter your choice as an integer, such as \"1\". Please try again.")
+
+    return user_input
+
+def get_float(string = "", minimum = None, maximum = None):
+    if (minimum != None) and (maximum != None):
+        check_range = True
+    else:
+        check_range = False
+
+    # Loops until a valid float within the input range is selected.
+    while True:
+        try:
+            user_input = float(input(f"{string}: "))
+
+            # Prevents invalid inputs from being entered.
+            if check_range and (user_input < minimum or user_input > maximum):
+                raise RuntimeError
+            
+            # Breaks to the return statement if the input is valid.
+            break
+        except RuntimeError:
+            print(f"You must enter a number from {minimum} to {maximum}. Please try again.")
+        except ValueError:
+            print(f"You must enter your choice as an floating point number, such as \"3.5\". Please try again.")
 
     return user_input
 
@@ -63,17 +81,17 @@ def prompt_menu(options):
 
 def view_buildings(campus, history):
     while True:
-
         print_separator()
         campus.print_table()
         
-        choice = prompt_menu(["Find shortest route between buildings", "Lookup room by id", "Exit"])
+        choice = prompt_menu(["Find shortest route between buildings", "Lookup building by id", "Add building", "Exit"])
 
         print()
         match choice:
+            # Find shortest route
             case 1:
                 while True:
-                    id1 = input("Enter the id of the starting point: ")
+                    id1 = input("Enter the id of the starting point: ").upper()
 
                     if campus.lookup_building(id1) is None:
                         print("Invalid building id. Please try again.")
@@ -82,7 +100,7 @@ def view_buildings(campus, history):
                     break
 
                 while True:
-                    id2 = input("Enter the id of the end point: ")
+                    id2 = input("Enter the id of the end point: ").upper()
 
                     if campus.lookup_building(id2) is None:
                         print("Invalid building id. Please try again.")
@@ -105,12 +123,78 @@ def view_buildings(campus, history):
                     print(f"{building.building_id} ({building.name})", end=end)
 
                 input("\nPress enter to continue.")
-                    
+            
+            # Building lookup
             case 2:
-                pass
+                id = input("Enter the id of the building: ").upper()
+                building = campus.lookup_building(id)
+                
+                if building is None:
+                    print(f"\nNo building found with id {id}")
+                    
+                else:
+                    select_building(campus, building)
 
+                input("\nPress enter to continue.")
+                
+            # Add building
             case 3:
-                return
+                id = input("Enter the building id: ").upper()
+                name = input("Enter the building name: ")
+                latitude = get_float("Enter the latitude", -90, 90)
+                longitude = get_float("Enter the longitude", -180, 180)
+
+                campus.insert_building(Building(id, name, (latitude, longitude)))
+
+                print("\nBuilding added.")
+
+                input ("\nPress enter to continue.")
+
+
+            # Exit
+            case 4:
+               return 
+
+
+def select_building(campus, building):
+    print_separator()
+        
+    choice = prompt_menu(["View rooms", "Add pathway" ,f"Remove building {building.building_id}", "Exit"])
+
+    print()
+    match choice:
+        # View rooms
+        case 1:
+            view_rooms(building)
+
+        # Add pathway
+        case 2:
+            print_separator()
+            campus.print_table()
+
+            id = input("\nEnter the id of the connecting building: ").upper()
+            weight = get_float("Enter the pathway walking time, in minutes", 0, 20)
+
+            if campus.lookup_building(id) is None:
+                print(f"\nNo building found with id {id}")
+
+            else:
+                campus.add_pathway(building.building_id, id, weight) 
+                print("\nPathway added.")
+
+
+        # Remove building
+        case 3:
+            campus.remove_building(building.building_id) 
+            
+            print(f"Building removed.")
+
+        # Exit
+        case 4:
+            return
+
+def view_rooms(building):
+    pass
 
 def view_route_history():
     pass
