@@ -131,16 +131,23 @@ def make_service_request(requests:RequestQueue):
                 if not request.strip():
                     print("No request was given. Exiting create request.")
                     break
-                requests.enqueue(request)
-                print("Request has ben queued")
+                else:
+                    requests.enqueue(request)
+                    print("Request is now queued")
+
+                    input("\nPress enter to continue.")
+            case 2:
+                request = requests.dequeue()
+                if isinstance(request, ValueError):
+                    print("There are no requests in the queue")
+                else:
+                    print("The request is:")
+                    print(f'"{request}"')
 
                 input("\nPress enter to continue.")
-                break
-            case 2:
-                pass
 
             case 3:
-                pass
+                return
                 
 
 

@@ -28,7 +28,7 @@ class Stack:
         else:
             self.body = [item]
     def pop(self):
-        if self.body is not None:
+        if self.body is not None and self.body != []:
             return self.body.pop()
         return IndexError("stack is empty")
     def is_empty(self):
@@ -46,12 +46,12 @@ class Queue:
             self.body = [item]
 
     def dequeue(self):
-        if self.body is not None:
+        if self.body is not None and self.body != []:
             return self.body.pop(0)
         return IndexError("queue is empty")
 
     def peek(self):
-        if self.body is not None:
+        if self.body is not None and self.body != []:
             return self.body[0]
         return IndexError("queue is empty")
 

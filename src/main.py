@@ -6,11 +6,14 @@ import sys
 if __name__ == "__main__":
     # Initialize campus with buildings (no rooms)
     campus = CampusGraph()
-    with open("campus_graph.txt") as campus_file:
+    with open("src/campus_graph.txt") as campus_file:
         campus.import_from_file(campus_file)
 
     # Initialize history
     history = History()
+
+    #Initialize RequestQueue
+    requests = RequestQueue()
 
     while True:
         # Main menu
@@ -23,7 +26,7 @@ if __name__ == "__main__":
             case 3: 
                 view_bookings()
             case 4:
-                make_service_request()
+                make_service_request(requests)
             case 5:
                 sys.exit()
 
