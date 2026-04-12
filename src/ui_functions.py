@@ -1,22 +1,9 @@
 from request_processor import RequestQueue
-from building import  Building
+from building import Building
+from room import Room
 
 def print_separator():
     print(f"\n{"-" * 79}\n")
-
-def format_cell(text, width):
-    text = str(text)
-    if len(text) > width:
-        text = text[:width - 3] + "..."
-    return f"{text:<{width+3}}"
-
-def format_row(items, width):
-    row = ""
-
-    for item in items:
-        row += format_cell(item, width)
-    
-    return row
 
 def get_int(string = "", minimum = None, maximum = None):
     if (minimum != None) and (maximum != None):
@@ -194,7 +181,59 @@ def select_building(campus, building):
             return
 
 def view_rooms(building):
-    pass
+    while True:
+        print_separator()
+        building.print_room_table()
+        
+        choice = prompt_menu(["Lookup room by id", "Add room", "Exit"])
+
+        print()
+        match choice:
+            # Room lookup
+            case 1:
+                id = input("Enter the id of the room: ").upper()
+                room = building.lookup_room(id)
+                
+                if room is None:
+                    print(f"\nNo room found with id {id}")
+                    
+                else:
+                    select_room(building, room)
+
+                input("\nPress enter to continue.")
+                
+            # Add room
+            case 2:
+                id = input("Enter the room id: ").upper()
+                capacity = get_int("Enter the room capacity")
+                room_type = input("Enter the room type: ")
+
+                building.insert_room(Room(id, capacity, room_type))
+
+                print("\nRoom added.")
+
+                input ("\nPress enter to continue.")
+
+            # Exit
+            case 3:
+               return
+
+def select_room(building, room):
+    print_separator()
+        
+    choice = prompt_menu([f"Remove room {room.room_id}", "Exit"])
+
+    print()
+    match choice:
+        # Remove room
+        case 1:
+            building.remove_room(room.room_id) 
+            
+            print(f"Room removed.")
+
+        # Exit
+        case 2:
+            return
 
 def view_route_history():
     pass

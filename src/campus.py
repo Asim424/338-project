@@ -1,7 +1,7 @@
 from math import inf
 from building import *
 from data_structures import PriorityQueue, Stack
-from ui_functions import format_row
+from table_format import format_row
 
 
 class PathwayEdge:
