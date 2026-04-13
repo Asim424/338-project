@@ -235,8 +235,35 @@ def select_room(building, room):
         case 2:
             return
 
-def view_route_history():
-    pass
+def view_route_history(history):
+    while True:
+        print_separator()
+        if history.is_empty():
+            print("Navigation history is empty. No previous routes available.")
+            input("\nPress enter to return to the main menu.")
+            return
+
+        current = history.peek()
+        print(f"Current System State: Last navigated to {current.destination.building_id} from {current.origin.building_id}.")
+        print(f"Stored History States: {len(history._stack)}")
+        
+        choice = prompt_menu(["Undo last route", "Exit"])
+
+        print()
+        match choice:
+            case 1:
+                removed = history.undo()
+                print(f"Action: Reverted navigation query from {removed.origin.building_id} to {removed.destination.building_id}.")
+                
+                if not history.is_empty():
+                    new_top = history.peek()
+                    print(f"System State Restored. Previous destination: {new_top.destination.building_id}")
+                else:
+                    print("System State Restored. History is now empty.")
+                
+                input("\nPress enter to continue.")
+            case 2:
+                return
 
 def view_bookings():
     pass

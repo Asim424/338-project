@@ -22,7 +22,7 @@ if __name__ == "__main__":
             case 1:
                 view_buildings(campus, history)
             case 2:
-                view_route_history()
+                view_route_history(history)
             case 3: 
                 view_bookings()
             case 4:
