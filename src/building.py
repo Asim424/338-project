@@ -1,4 +1,5 @@
 from room import *
+from table_format import format_row
 
 class Building:
     def __init__(self, building_id: str, name: str, location: tuple):
@@ -21,3 +22,16 @@ class Building:
             return None
 
         return self.rooms[room_id]
+
+    def print_room_table(self):
+        headers = ["ID", "Capacity", "Room Type"]
+        cell_width = 24
+
+        # Header
+        header_row = format_row(headers, cell_width)
+        print(header_row)
+        print("-" * len(header_row))
+
+        # Building rows
+        for room in self.rooms.values():
+            print(format_row([room.room_id, room.capacity, room.room_type], cell_width))
