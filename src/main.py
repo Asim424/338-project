@@ -1,3 +1,5 @@
+import os
+
 from campus import CampusGraph
 from history import History
 from ui_functions import *
@@ -6,7 +8,10 @@ import sys
 if __name__ == "__main__":
     # Initialize campus with buildings (no rooms)
     campus = CampusGraph()
-    with open("campus_graph.txt") as campus_file:
+    base_dir = os.path.dirname(__file__)
+    graph_path = os.path.join(base_dir, "campus_graph.txt")
+
+    with open(graph_path) as campus_file:
         campus.import_from_file(campus_file)
 
     # Initialize history
@@ -17,7 +22,7 @@ if __name__ == "__main__":
 
     while True:
         # Main menu
-        choice = prompt_menu(["View buildings", "View route history", "View bookings", "Make service request", "Exit"])
+        choice = prompt_menu(["View buildings", "View route history", "View bookings", "Make service request", "View request queue", "Exit"])
         match choice:
             case 1:
                 view_buildings(campus, history)
@@ -28,5 +33,7 @@ if __name__ == "__main__":
             case 4:
                 make_service_request(requests)
             case 5:
+                view_request_queue(requests)
+            case 6:
                 sys.exit()
 

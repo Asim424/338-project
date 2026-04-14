@@ -3,7 +3,7 @@ from building import Building
 from room import Room
 
 def print_separator():
-    print(f"\n{"-" * 79}\n")
+    print(f"\n{'-' * 79}\n")
 
 def get_int(string = "", minimum = None, maximum = None):
     if (minimum != None) and (maximum != None):
@@ -269,9 +269,11 @@ def view_bookings():
     pass
 
 def make_service_request(requests:RequestQueue):
+    priority_levels = ["Emergency", "Standard", "Low"]
+
     while True:
         print_separator()
-        choice = prompt_menu(["Create new request", "Get next Request", "exit"])
+        choice = prompt_menu(["Create new request", "Get next Request", "Exit"])
 
         print()
 
@@ -281,25 +283,41 @@ def make_service_request(requests:RequestQueue):
                 if not request.strip():
                     print("No request was given. Exiting create request.")
                     break
-                else:
-                    requests.enqueue(request)
-                    print("Request is now queued")
 
-                    input("\nPress enter to continue.")
+                print_separator()
+                print("Select request priority:")
+                for idx, priority in enumerate(priority_levels, start=1):
+                    print(f"\t{idx}. {priority}")
+                priority_choice = get_int("Enter priority by number", 1, len(priority_levels))
+                priority_label = priority_levels[priority_choice - 1]
+
+                requests.enqueue(request, priority_label)
+                print(f"Request queued with {priority_label} priority.")
+                input("\nPress enter to continue.")
+
             case 2:
                 request = requests.dequeue()
-                if isinstance(request, IndexError):
+                if request is None:
                     print("There are no requests in the queue")
                 else:
-                    print("The request is:")
-                    print(f'"{request}"')
+                    print("Now serving the highest-priority request:")
+                    print(f"Priority: {request['priority']}")
+                    print(f"Request: {request['description']}")
 
                 input("\nPress enter to continue.")
 
             case 3:
                 return
                 
-
+def view_request_queue(requests:RequestQueue):
+    ## displays requests and their urgency levels in the queue, from most to least urgent
+    print_separator()
+    if requests.is_empty():
+        print("The request queue is empty. No requests to display.")
+    else:
+        print("Current Request Queue (from most to least urgent):")
+        for i, request in enumerate(requests.get_all_requests(), start=1):
+            print(f"{i}. [{request['priority']}] {request['description']}")
 
             
 
