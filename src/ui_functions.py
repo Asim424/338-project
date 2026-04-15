@@ -323,7 +323,6 @@ def view_request_queue(requests:RequestQueue):
             
 def make_service_ticket(tickets:TicketQueue):
     while (True):
-        print_separator()
         
         choice = prompt_menu([f"Queue new ticket", "Dequeue ticket", "Exit"])
 
@@ -337,6 +336,7 @@ def make_service_ticket(tickets:TicketQueue):
                     break
 
                 tickets.enqueue(ticket)
+                print()
                 
                 print(f"Ticket \"{ticket}\" queued.")
 
