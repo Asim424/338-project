@@ -1,4 +1,5 @@
 from request_processor import RequestQueue
+from service_tickets import TicketQueue
 from building import Building
 from room import Room
 
@@ -320,4 +321,36 @@ def view_request_queue(requests:RequestQueue):
             print(f"{i}. [{request['priority']}] {request['description']}")
 
             
+def make_service_ticket(tickets:TicketQueue):
+    while (True):
+        
+        choice = prompt_menu([f"Queue new ticket", "Dequeue ticket", "Exit"])
 
+        print()
+        match choice:
+            # Remove room
+            case 1:
+                ticket = input("Enter ticket: ")
+                if not ticket.strip():
+                    print("No ticket was given. Exiting queue ticket.")
+                    break
+
+                tickets.enqueue(ticket)
+                print()
+                
+                print(f"Ticket \"{ticket}\" queued.")
+
+            case 2:
+                ticket = tickets.dequeue()
+                if ticket is None:
+                    print("There are no tickets in the queue")
+
+                else:
+                    print(f"Ticket: \"{ticket}\"")
+
+                input("\nPress enter to continue.")
+
+            # Exit
+            case 3:
+                return
+    

@@ -1,6 +1,7 @@
 import os
 
 from campus import CampusGraph
+from service_tickets import TicketQueue
 from history import History
 from ui_functions import *
 import sys
@@ -20,9 +21,12 @@ if __name__ == "__main__":
     #Initialize RequestQueue
     requests = RequestQueue()
 
+    #Initializa TicketQueue
+    tickets = TicketQueue()
+
     while True:
         # Main menu
-        choice = prompt_menu(["View buildings", "View route history", "View bookings", "Make service request", "View request queue", "Exit"])
+        choice = prompt_menu(["View buildings", "View route history", "View bookings", "Make service request", "View request queue", "Make service ticket", "Exit"])
         match choice:
             case 1:
                 view_buildings(campus, history)
@@ -35,5 +39,7 @@ if __name__ == "__main__":
             case 5:
                 view_request_queue(requests)
             case 6:
+                make_service_ticket(tickets)
+            case 7:
                 sys.exit()
 
