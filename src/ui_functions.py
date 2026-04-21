@@ -1,3 +1,4 @@
+import datetime
 from request_processor import RequestQueue
 from service_tickets import TicketQueue
 from building import Building
@@ -220,21 +221,33 @@ def view_rooms(building):
                return
 
 def select_room(building, room):
-    print_separator()
-        
-    choice = prompt_menu([f"Remove room {room.room_id}", "Exit"])
+    while True:
+        print_separator()
+        choice = prompt_menu([
+            "View bookings", 
+            "Add booking", 
+            "Remove booking", 
+            f"Remove room {room.room_id}", 
+            "Exit"
+        ])
 
-    print()
-    match choice:
-        # Remove room
-        case 1:
-            building.remove_room(room.room_id) 
-            
-            print(f"Room removed.")
-
-        # Exit
-        case 2:
-            return
+        match choice:
+            case 1:
+                # We can reuse the view_bookings logic here
+                view_room_bookings(room) 
+            case 2:
+                add_booking_ui(room)
+            case 3:
+                event_name = input("Enter the exact name of the event to remove: ")
+                # If you have a remove method in your Room class, call it here:
+                # room.remove_booking(event_name)
+                print(f"Feature to remove '{event_name}' is under development.")
+                input("\nPress enter to continue.")
+            case 4:
+                building.remove_room(room.room_id)
+                return
+            case 5:
+                return
 
 def view_route_history(history):
     while True:
@@ -266,8 +279,43 @@ def view_route_history(history):
             case 2:
                 return
 
-def view_bookings():
-    pass
+def view_bookings(campus):
+    print_separator()
+    build_id = input("Enter Building ID to check: ").upper()
+    building = campus.lookup_building(build_id)
+    
+    if not building:
+        print(f"Building {build_id} not found.")
+        return
+
+    room_id = input("Enter Room ID: ").upper()
+    room = building.lookup_room(room_id)
+    
+    if not room:
+        print(f"Room {room_id} not found in {build_id}.")
+        return
+
+    print("\nEnter date to view (YYYY-MM-DD):")
+    date_str = input("> ")
+    try:
+        year, month, day = map(int, date_str.split('-'))
+        start = datetime.datetime(year, month, day, 0, 0, 0)
+        end = datetime.datetime(year, month, day, 23, 59, 59)
+        
+        events = room.events_in_range(start, end)
+        
+        print_separator()
+        print(f"Bookings for {room_id} on {date_str}:")
+        if not events:
+            print("No bookings found for this day.")
+        else:
+            for event in events:
+                print(f"- {event.event_name}: {event.start_time.strftime('%H:%M')} to {event.end_time.strftime('%H:%M')}")
+                
+    except ValueError:
+        print("Invalid date format. Please use YYYY-MM-DD.")
+    
+    input("\nPress enter to continue.")
 
 def make_service_request(requests:RequestQueue):
     priority_levels = ["Emergency", "Standard", "Low"]
@@ -353,4 +401,46 @@ def make_service_ticket(tickets:TicketQueue):
             # Exit
             case 3:
                 return
+            
+def view_room_bookings(room):
+    print_separator()
+    print(f"Viewing bookings for Room: {room.room_id}")
+    print("Enter date to view (YYYY-MM-DD):")
+    date_str = input("> ")
+    try:
+        year, month, day = map(int, date_str.split('-'))
+        start = datetime.datetime(year, month, day, 0, 0, 0)
+        end = datetime.datetime(year, month, day, 23, 59, 59)
+        
+        events = room.events_in_range(start, end)
+        
+        print_separator()
+        print(f"Bookings for {room.room_id} on {date_str}:")
+        if not events:
+            print("No bookings found for this day.")
+        else:
+            for event in events:
+                print(f"- {event.event_name}: {event.start_time.strftime('%H:%M')} to {event.end_time.strftime('%H:%M')}")
+                
+    except ValueError:
+        print("Invalid date format. Please use YYYY-MM-DD.")
+    
+    input("\nPress enter to continue.")
+            
+def add_booking_ui(room):
+    name = input("Enter event name: ")
+    date_str = input("Enter date (YYYY-MM-DD): ")
+    start_t = input("Enter start time (HH:MM): ")
+    end_t = input("Enter end time (HH:MM): ")
+
+    try:
+        # Combine date and time strings
+        start_dt = datetime.datetime.strptime(f"{date_str} {start_t}", "%Y-%m-%d %H:%M")
+        end_dt = datetime.datetime.strptime(f"{date_str} {end_t}", "%Y-%m-%d %H:%M")
+        
+        room.add_booking(name, start_dt, end_dt)
+        print("Booking added successfully!")
+        input("\nPress enter to continue.")
+    except ValueError:
+        print("Invalid format. Use YYYY-MM-DD and HH:MM.")            
     

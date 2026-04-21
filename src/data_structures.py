@@ -106,3 +106,66 @@ def arr_bin_search(item, arr, delete : bool):
             right = mid - 1
 
     return ValueError("Value not found")
+
+class EventNode:
+    def __init__(self, key, event):
+        # [key, event, left, right, height]
+        self.body = [key, event, None, None, 1]
+
+class Event_Index:
+    def __init__(self):
+        self.root = None
+
+    def height(self, node):
+        return node.body[4] if node else 0
+
+    def balance(self, node):
+        if not node: return 0
+        return self.height(node.body[2]) - self.height(node.body[3])
+
+    def rotate_right(self, y):
+        x = y.body[2]
+        t2 = x.body[3]
+        x.body[3] = y
+        y.body[2] = t2
+        y.body[4] = 1 + max(self.height(y.body[2]), self.height(y.body[3]))
+        x.body[4] = 1 + max(self.height(x.body[2]), self.height(x.body[3]))
+        return x
+
+    def rotate_left(self, x):
+        y = x.body[3]
+        t2 = y.body[2]
+        y.body[2] = x
+        x.body[3] = t2
+        x.body[4] = 1 + max(self.height(x.body[2]), self.height(x.body[3]))
+        y.body[4] = 1 + max(self.height(y.body[2]), self.height(y.body[3]))
+        return y
+
+    def insert(self, node, key, event):
+        if not node: return EventNode(key, event)
+        if key < node.body[0]:
+            node.body[2] = self.insert(node.body[2], key, event)
+        elif key > node.body[0]:
+            node.body[3] = self.insert(node.body[3], key, event)
+        else: return node
+
+        node.body[4] = 1 + max(self.height(node.body[2]), self.height(node.body[3]))
+        b = self.balance(node)
+        if b > 1 and key < node.body[2].body[0]: return self.rotate_right(node)
+        if b < -1 and key > node.body[3].body[0]: return self.rotate_left(node)
+        if b > 1 and key > node.body[2].body[0]:
+            node.body[2] = self.rotate_left(node.body[2])
+            return self.rotate_right(node)
+        if b < -1 and key < node.body[3].body[0]:
+            node.body[3] = self.rotate_right(node.body[3])
+            return self.rotate_left(node)
+        return node
+
+    def add_event(self, key, event):
+        self.root = self.insert(self.root, key, event)
+
+    def get_range(self, node, start, end, result):
+        if not node: return
+        if start < node.body[0]: self.get_range(node.body[2], start, end, result)
+        if start <= node.body[0] <= end: result.append(node.body[1])
+        if end > node.body[0]: self.get_range(node.body[3], start, end, result)

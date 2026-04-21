@@ -1,8 +1,14 @@
 import datetime
 
-class Booking():
-    def __init__(self, date_time : datetime):
-        self.date_time = date_time
+class Booking:
+    def __init__(self, event_name: str, start_time: datetime, end_time: datetime):
+        self.event_name = event_name
+        self.start_time = start_time  # This replaces date_time
+        self.end_time = end_time
+
+    # This helper allows to compare bookings directly by time
+    def __lt__(self, other):
+        return self.start_time < other.start_time
 
 class Path: #straight line between 2 points, start and end order does not matter
     def __init__(self,start : tuple, end : tuple, weight : float):
@@ -52,9 +58,7 @@ class Queue:
 
 class Node:
     def __init__(self, key, event):
-        self.body = []
-       
-
+        self.body = [key, event, None, None, 1]  # [key, event, left, right, height]
 
 class Event_Index:
     # node is an array such that [key, event, left, right, height]
@@ -151,7 +155,19 @@ class Event_Index:
         else:
             return self.search(node.body[3], key)
         
+    def get_range(self, node, start_key, end_key, result):
+        if not node:
+            return
+        # If the current node's key is within the range, add it to the result
+        if start_key < node.body[0]:
+            self.get_range(node.body[2], start_key, end_key, result)
+        # If the current node's key is within the range, add it to the result
+        if start_key <= node.body[0] <= end_key:
+            result.append(node.body[1])
 
+        if end_key > node.body[0]:
+            self.get_range(node.body[3], start_key, end_key, result)
+        
 class Requests:
     def __init__(self):
         self.body = Queue()
@@ -166,26 +182,59 @@ class Requests:
 
 class Room:
     def __init__(self, room_id: str, capacity: int, room_type: str):
+        self.room_id = room_id
+        self.capacity = capacity
+        self.room_type = room_type
+        
+        # AVL tree to store events by time for efficient search and insertion
+        self.calendar = Event_Index() 
+        # List to store bookings in order of insertion for easy retrieval of events in a range and next event
+        self.bookings = []
 
-        self.room_id = room_id   # e.g. "ICT-121"
+    def add_booking(self, event_name, start, end):
+        new_booking = Booking(event_name, start, end)
+        
+        # 1. AVL TREE INSERTION
+        self.calendar.add_event(start, new_booking)
+        
+        # 2. INSERT INTO BOOKING LIST IN SORTED ORDER
+        inserted = False
+        for i in range(len(self.bookings)):
+            if new_booking.start_time < self.bookings[i].start_time:
+                self.bookings.insert(i, new_booking)
+                inserted = True
+                break
 
-        self.capacity = capacity    # max occupancy
-
-        self.room_type = room_type  # "lecture", "lab", "office"
-
-        self.bookings = []  # list of Booking objects
+        # If not found. Insert at the end
+        if not inserted:
+            self.bookings.append(new_booking)       
     
-    def events_in_range(self, start_time : datetime, end_time : datetime):
+    def events_in_range(self, start_time: datetime, end_time: datetime):
         output = []
-        # for events in a given day have the start_time be the 12am of that day and end_time be 11:59 pm of that day
-        for booking in self.bookings:
-            if end_time >= booking.date_time >= start_time:
-                output.append(booking)
+        # We use the AVL tree search instead of the old for-loop
+        if self.calendar.root:
+            self.calendar.get_range(self.calendar.root, start_time, end_time, output)
+        return output
     
-    def next_event(self, curr_event : Booking):
-        for booking in range(len(self.bookings)):
-            if self.bookings[booking] == curr_event:
-                return self.bookings[booking+1]
+    def next_event(self, current_time : datetime):
+        for booking in self.bookings:
+            if booking.start_time > current_time:
+                return booking
+        return None
+    
+    def get_events_for_day(self, year, month, day):
+        day_start = datetime.datetime(year, month, day, 0, 0, 0)
+        day_end = datetime.datetime(year, month, day, 23, 59, 59)
+        return self.events_in_range(day_start, day_end)
+    
+    def remove_booking(self, event_name: str):
+        # 1. Remove from list
+        self.bookings = [b for b in self.bookings if b.event_name != event_name]
+        
+        # 2. Rebuild the AVL tree since we don't have a delete function
+        self.calendar = Event_Index()
+        for b in self.bookings:
+            self.calendar.add_event(b.start_time, b)
             
 class priorityQ:
     def __init__(self):
