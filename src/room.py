@@ -1,10 +1,10 @@
-import datetime
+from datetime import datetime
 from data_structures import Event_Index
 
 class Booking:
     def __init__(self, event_name: str, start_time: datetime, end_time: datetime):
         self.event_name = event_name
-        self.start_time = start_time
+        self.start_time = start_time 
         self.end_time = end_time
 
 class Room: 
