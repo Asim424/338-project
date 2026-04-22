@@ -28,7 +28,7 @@ This file contains some demonstrations as required by the project guidelines.
 **Matplotlib** must be installed to use some of the demonstrations in this
 file.
 
-1. Run the `demonstration.py` file in the `src/` directory.
+1. Run the `demonstrations.py` file in the `src/` directory.
 
 2. Just like in the main program, you can select between different
    demonstrations in a menu.
