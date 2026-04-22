@@ -1,7 +1,9 @@
 from campus import CampusGraph
 from building import Building
 from room import Room
+from ui_functions import prompt_menu
 
+import sys
 from random import randint
 from timeit import timeit
 from matplotlib import pyplot as plt
@@ -82,4 +84,13 @@ def room_lookup_demonstration():
     plt.show()
 
 if __name__ == "__main__":
-    building_lookup_demonstration()
+    while True:
+        # Main menu
+        choice = prompt_menu(["Building lookup demo", "Room lookup demo", "Exit"])
+        match choice:
+            case 1:
+                building_lookup_demonstration()
+            case 2:
+                room_lookup_demonstration()
+            case 3:
+                sys.exit()
