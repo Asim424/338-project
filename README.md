@@ -32,12 +32,18 @@ file.
 
 ## Repo URL
 [Repo URL][link]
+
 [link]: https://github.com/Asim424/338-project/
 
 ## group members:
 Asim Hamdan
+
 Benjamin Anderson
+
 Alex Gamble
+
 Toan Le
+
 Jacob Plourde
+
 Denis Sukhanov
