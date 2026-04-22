@@ -1,5 +1,13 @@
 # ENSF 338 Term Project - Group 10
 
+## Group Members:
+- Asim Hamdan
+- Benjamin Anderson
+- Alex Gamble
+- Toan Le
+- Jacob Plourde
+- Denis Sukhanov
+
 ## User Guide
 
 ### Main Program
@@ -26,24 +34,11 @@ file.
    demonstrations in a menu.
 
 ## Report and Video Link
-[OneDrive URL][link]
+[OneDrive Link][link]
 
 [link]: https://uofc-my.sharepoint.com/:f:/g/personal/jacob_plourde_ucalgary_ca/IgCox3AVNYPHSaNJM3JaQUu-AfCOnJGEbBX0ITHq6yM1lxE?e=2oByI5
 
 ## Repo URL
-[Repo URL][link]
+Repo URL: [https://github.com/Asim424/338-project/][url]
 
-[link]: https://github.com/Asim424/338-project/
-
-## group members:
-Asim Hamdan
-
-Benjamin Anderson
-
-Alex Gamble
-
-Toan Le
-
-Jacob Plourde
-
-Denis Sukhanov
+[url]: https://github.com/Asim424/338-project/
