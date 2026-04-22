@@ -29,3 +29,14 @@ file.
 [OneDrive URL][link]
 
 [link]: https://uofc-my.sharepoint.com/:f:/g/personal/jacob_plourde_ucalgary_ca/IgCox3AVNYPHSaNJM3JaQUu-AfCOnJGEbBX0ITHq6yM1lxE?e=2oByI5
+
+## Repo URL
+[link]: https://github.com/Asim424/338-project/
+
+## group members:
+Asim Hamdan
+Benjamin Anderson
+Alex Gamble
+Toan Le
+Jacob Plourde
+Denis Sukhanov
